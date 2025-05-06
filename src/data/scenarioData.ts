@@ -1,4 +1,3 @@
-
 import { LineChart } from 'recharts';
 
 // Types for scenario data
@@ -47,12 +46,12 @@ export interface SourceData {
 export const scenarios: Record<ScenarioKey, Scenario> = {
   'checkout-drop': {
     title: 'Checkout Completion Drop (May 5th)',
-    query: 'Why did checkout completion drop on May 5th?',
+    query: 'What happened to our checkout conversion yesterday afternoon?',
     description: 'Investigate the sudden decrease in checkout completion rate that started on May 5th.'
   },
   'api-error-spike': {
     title: 'API Error Rate Spike (May 6th)',
-    query: 'What caused the API error spike on May 6th?',
+    query: 'Investigate the API error spike on May 6th.',
     description: 'Analyze the sudden increase in API error rates that occurred on May 6th.'
   }
 };
