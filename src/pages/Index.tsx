@@ -37,7 +37,7 @@ import {
   ScenarioKey
 } from '@/data/scenarioData';
 
-// Agent action types for thought stream
+// Cerevin action types for thought stream
 type AgentActionType = 'parse' | 'identify' | 'determine' | 'thought' | 'check' | 'finding' | 'warning' | 'correlate' | 'hypothesis';
 
 interface AgentAction {
@@ -72,6 +72,7 @@ const Index = () => {
   
   const thoughtStreamRef = useRef<HTMLDivElement>(null);
 
+  
   // Update query input when scenario changes
   useEffect(() => {
     if (selectedScenario === 'checkout-drop') {
@@ -82,6 +83,7 @@ const Index = () => {
     setInferredScenario(selectedScenario);
   }, [selectedScenario]);
 
+  
   // Set initial active sources when scenario changes
   useEffect(() => {
     const defaultSources = getSourceAvailabilityForScenario(inferredScenario);
@@ -100,6 +102,7 @@ const Index = () => {
     setShowSummary(false);
   }, [inferredScenario]);
 
+  
   // Scroll thought stream to bottom when new actions are added
   useEffect(() => {
     if (thoughtStreamRef.current && agentActions.length > 0) {
@@ -107,6 +110,7 @@ const Index = () => {
     }
   }, [agentActions]);
 
+  
   // Prepare agent action content for a specific phase
   const prepareAgentActions = () => {
     const actions: AgentAction[] = [];
@@ -191,6 +195,7 @@ const Index = () => {
     return { actions, nextDelay: actionDelay };
   };
 
+  
   // Simulated analysis process
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -318,6 +323,7 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, [analysisState, currentProcessingStep, activeSources, processedSources, inferredScenario]);
 
+  
   // Start analysis process
   const handleAnalyze = () => {
     setAnalysisState('processing');
@@ -328,6 +334,7 @@ const Index = () => {
     toast.info("Starting analysis for " + scenarios[inferredScenario].title);
   };
 
+  
   // Show evidence dialog
   const handleShowEvidence = (sourceKey: string, evidenceId: number) => {
     const data = getSourceDataForScenario(inferredScenario, sourceKey, evidenceId);
@@ -335,6 +342,7 @@ const Index = () => {
     setShowDialog(true);
   };
 
+  
   // Toggle data source
   const toggleSource = (source: string) => {
     setActiveSources(prev => ({
@@ -348,6 +356,7 @@ const Index = () => {
     }
   };
 
+  
   // Get hypothesis confidence text
   const getHypothesisConfidenceText = (scenarioKey: string, sources: any): string => {
     const confidence = getHypothesisForScenario(scenarioKey, sources).confidence;
@@ -357,6 +366,7 @@ const Index = () => {
     return "";
   };
 
+  
   // Get checking content based on source and scenario
   const getCheckingContent = (sourceKey: string, scenarioKey: string): string => {
     if (scenarioKey === 'checkout-drop') {
@@ -387,6 +397,7 @@ const Index = () => {
     return `Checking ${sourceLabels[sourceKey]} for relevant data...`;
   };
 
+  
   // Get thought content based on source and scenario
   const getThoughtContent = (sourceKey: string, scenarioKey: string): string => {
     if (scenarioKey === 'checkout-drop') {
@@ -417,6 +428,7 @@ const Index = () => {
     return "Interesting finding. Let me continue gathering more context.";
   };
 
+  
   // Get correlation content based on scenario and available sources
   const getCorrelationContent = (scenarioKey: string, sources: any): string => {
     if (scenarioKey === 'checkout-drop') {
@@ -443,11 +455,13 @@ const Index = () => {
     return "Limited correlation possible due to insufficient data sources.";
   };
 
+  
   // Get supporting evidence based on current scenario and active sources
   const getSupportingEvidence = () => {
     return getSupportingEvidenceForScenario(inferredScenario, activeSources);
   };
 
+  
   // Source icon mapping
   const sourceIcons = {
     analytics: <BarChart3 className="mr-2 h-5 w-5" />,
@@ -458,6 +472,7 @@ const Index = () => {
     appstore: <AppWindow className="mr-2 h-5 w-5" />,
   };
 
+  
   // Source label mapping
   const sourceLabels = {
     analytics: "Product Analytics",
@@ -468,6 +483,7 @@ const Index = () => {
     appstore: "App Store Reviews",
   };
 
+  
   // Agent action icon mapping
   const getActionIcon = (type: AgentActionType) => {
     switch (type) {
@@ -484,6 +500,7 @@ const Index = () => {
     }
   };
 
+  
   // Get color for agent action based on type
   const getActionColor = (type: AgentActionType) => {
     switch (type) {
@@ -500,6 +517,7 @@ const Index = () => {
     }
   };
 
+  
   // Get background color for agent action based on type
   const getActionBgColor = (type: AgentActionType) => {
     switch (type) {
@@ -528,7 +546,7 @@ const Index = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-800 mb-1">Insight Flow</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-1">CerevinAI</h2>
             <p className="text-sm text-gray-500">AI Root Cause Analysis</p>
           </div>
           
@@ -582,7 +600,7 @@ const Index = () => {
             </div>
             
             <p className="text-gray-600 mb-4">
-              Ask the AI agent to investigate and diagnose KPI changes by analyzing various data sources.
+              Ask Cerevin to investigate and diagnose KPI changes by analyzing various data sources.
             </p>
             
             <Separator className="my-4" />
@@ -669,7 +687,7 @@ const Index = () => {
 
                   {/* Thought stream log */}
                   <div className="mb-4">
-                    <h3 className="text-sm font-medium text-gray-500 mb-3">Agent Reasoning Process</h3>
+                    <h3 className="text-sm font-medium text-gray-500 mb-3">Cerevin Reasoning Process</h3>
                     <div 
                       ref={thoughtStreamRef}
                       className="bg-white border border-gray-100 rounded-lg shadow-sm p-4 max-h-[400px] overflow-y-auto"
@@ -688,7 +706,7 @@ const Index = () => {
                             </div>
                             <div className="flex-1">
                               <h4 className={`text-xs font-bold uppercase ${getActionColor(action.type)}`}>
-                                Agent {action.label}
+                                Cerevin {action.label}
                               </h4>
                               <p className="text-sm mt-1 text-gray-700">{action.content}</p>
                               {action.type === 'finding' && action.sourceKey && (
@@ -750,275 +768,3 @@ const Index = () => {
                                     <motion.div 
                                       initial={{ width: 0 }}
                                       animate={{ width: `${getHypothesisForScenario(inferredScenario, activeSources).confidence.percent}%` }}
-                                      transition={{ duration: 1, delay: 0.2 }}
-                                      className="h-full bg-blue-600"
-                                    />
-                                  </div>
-                                  <span className="text-sm text-blue-600 ml-2">
-                                    {getHypothesisForScenario(inferredScenario, activeSources).confidence.percent}%
-                                  </span>
-                                </div>
-                                {getHypothesisForScenario(inferredScenario, activeSources).note && (
-                                  <p className="text-xs text-blue-600 italic mt-2">{getHypothesisForScenario(inferredScenario, activeSources).note}</p>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="mb-6">
-                          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Supporting Evidence</h3>
-                          <div className="space-y-3">
-                            {getSupportingEvidence().map((evidence, index) => (
-                              <motion.div 
-                                key={index}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 + index * 0.1 }}
-                                className="p-4 border border-gray-100 rounded-lg"
-                              >
-                                <div className="flex items-start">
-                                  <div className="mr-3 mt-0.5 text-gray-400">
-                                    {sourceIcons[evidence.source]}
-                                  </div>
-                                  <div>
-                                    <div className="flex items-center mb-1">
-                                      <h4 className="text-sm font-medium text-gray-700">
-                                        {sourceLabels[evidence.source]}
-                                      </h4>
-                                    </div>
-                                    <p className="text-sm text-gray-600">{evidence.text}</p>
-                                    {evidence.hasData && (
-                                      <button
-                                        onClick={() => handleShowEvidence(evidence.source, evidence.evidenceId)}
-                                        className="mt-2 text-xs font-medium text-blue-600 hover:text-blue-800 inline-flex items-center"
-                                      >
-                                        See Data
-                                        <ArrowRight className="ml-1 h-3 w-3" />
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-                              </motion.div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Reasoning Summary</h3>
-                          <p className="text-gray-600 text-sm">
-                            {inferredScenario === 'checkout-drop' && Object.values(activeSources).filter(Boolean).length >= 2 ? 
-                              "The agent identified a significant checkout completion drop in Analytics, correlated it with mobile-specific customer reports from Support, and linked it to the mobile UI changes in Release v2.5.1. The temporal alignment and semantic connections between these data sources led to this conclusion." :
-                              inferredScenario === 'api-error-spike' && Object.values(activeSources).filter(Boolean).length >= 2 ?
-                              "The agent detected a sharp API error rate spike, identified database connection pool saturation in Infrastructure metrics, and discovered the root cause in Internal communications pointing to an unauthorized analytics job. The exact timing correlation between these events established the causal relationship." :
-                              "The agent analyzed the available data sources to form a hypothesis, but additional data sources would strengthen the analysis and provide higher confidence in the conclusion."
-                            }
-                          </p>
-                        </div>
-                        
-                        {/* Action buttons */}
-                        <div className="mt-8 flex justify-end">
-                          <Button 
-                            variant="outline" 
-                            className="mr-3"
-                            onClick={() => setAnalysisState('idle')}
-                          >
-                            Reset Analysis
-                          </Button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </motion.div>
-              )}
-
-              {analysisState === 'complete' && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden"
-                  key="complete-state"
-                >
-                  <div className="p-6 border-b border-gray-100">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                      Synthesized Root Cause Analysis
-                    </h2>
-                    <p className="text-gray-600">
-                      Analysis for: <span className="font-medium">{queryInput}</span>
-                    </p>
-                  </div>
-                  
-                  <div className="p-6 bg-white">
-                    <div className="mb-6">
-                      <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Hypothesis & Confidence</h3>
-                      <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                        <div className="flex items-start">
-                          <div className="mr-3 mt-0.5 text-blue-500">
-                            <Lightbulb className="h-5 w-5" />
-                          </div>
-                          <div>
-                            <p className="text-blue-800 font-medium">
-                              {getHypothesisForScenario(inferredScenario, activeSources).conclusion}
-                            </p>
-                            <div className="mt-2 flex items-center">
-                              <span className="text-sm text-blue-600 mr-2">Confidence: {getHypothesisForScenario(inferredScenario, activeSources).confidence.level}</span>
-                              <div className="bg-blue-200 h-2 rounded-full w-24 overflow-hidden">
-                                <div 
-                                  style={{ width: `${getHypothesisForScenario(inferredScenario, activeSources).confidence.percent}%` }}
-                                  className="h-full bg-blue-600"
-                                />
-                              </div>
-                              <span className="text-sm text-blue-600 ml-2">
-                                {getHypothesisForScenario(inferredScenario, activeSources).confidence.percent}%
-                              </span>
-                            </div>
-                            {getHypothesisForScenario(inferredScenario, activeSources).note && (
-                              <p className="text-xs text-blue-600 italic mt-2">{getHypothesisForScenario(inferredScenario, activeSources).note}</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mb-6">
-                      <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Supporting Evidence</h3>
-                      <div className="space-y-3">
-                        {getSupportingEvidence().map((evidence, index) => (
-                          <div 
-                            key={index}
-                            className="p-4 border border-gray-100 rounded-lg"
-                          >
-                            <div className="flex items-start">
-                              <div className="mr-3 mt-0.5 text-gray-400">
-                                {sourceIcons[evidence.source]}
-                              </div>
-                              <div>
-                                <div className="flex items-center mb-1">
-                                  <h4 className="text-sm font-medium text-gray-700">
-                                    {sourceLabels[evidence.source]}
-                                  </h4>
-                                </div>
-                                <p className="text-sm text-gray-600">{evidence.text}</p>
-                                {evidence.hasData && (
-                                  <button
-                                    onClick={() => handleShowEvidence(evidence.source, evidence.evidenceId)}
-                                    className="mt-2 text-xs font-medium text-blue-600 hover:text-blue-800 inline-flex items-center"
-                                  >
-                                    See Data
-                                    <ArrowRight className="ml-1 h-3 w-3" />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Reasoning Summary</h3>
-                      <p className="text-gray-600 text-sm">
-                        {inferredScenario === 'checkout-drop' && Object.values(activeSources).filter(Boolean).length >= 2 ? 
-                          "The agent identified a significant checkout completion drop in Analytics, correlated it with mobile-specific customer reports from Support, and linked it to the mobile UI changes in Release v2.5.1. The temporal alignment and semantic connections between these data sources led to this conclusion." :
-                          inferredScenario === 'api-error-spike' && Object.values(activeSources).filter(Boolean).length >= 2 ?
-                          "The agent detected a sharp API error rate spike, identified database connection pool saturation in Infrastructure metrics, and discovered the root cause in Internal communications pointing to an unauthorized analytics job. The exact timing correlation between these events established the causal relationship." :
-                          "The agent analyzed the available data sources to form a hypothesis, but additional data sources would strengthen the analysis and provide higher confidence in the conclusion."
-                        }
-                      </p>
-                    </div>
-                    
-                    {/* Action buttons */}
-                    <div className="mt-8 flex justify-end">
-                      <Button 
-                        variant="outline" 
-                        className="mr-3"
-                        onClick={() => setAnalysisState('idle')}
-                      >
-                        Reset Analysis
-                      </Button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-      
-      {/* Evidence Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">
-              {dialogContent?.title}
-            </DialogTitle>
-            <DialogDescription className="text-gray-500">
-              {dialogContent?.description}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <DialogClose className="absolute right-4 top-4 opacity-70 hover:opacity-100">
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </DialogClose>
-          
-          <div className="mt-2">
-            {dialogContent?.type === 'chart' && (
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={dialogContent.chartData}
-                    margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="#3b82f6" 
-                      strokeWidth={2}
-                      dot={{ r: 3 }} 
-                      activeDot={{ r: 6 }} 
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            )}
-            
-            {dialogContent?.type === 'text' && (
-              <div className="bg-gray-50 p-4 rounded-lg text-sm text-gray-700 whitespace-pre-wrap">
-                {dialogContent.content}
-              </div>
-            )}
-            
-            {dialogContent?.type === 'list' && (
-              <ul className="space-y-2">
-                {dialogContent.items.map((item, idx) => (
-                  <li key={idx} className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-            
-            {dialogContent?.metadata && (
-              <div className="mt-4 text-xs text-gray-500">
-                {Object.entries(dialogContent.metadata).map(([key, value]) => (
-                  <div key={key} className="flex justify-between border-t border-gray-100 py-2">
-                    <span className="font-medium">{key}:</span>
-                    <span>{value as React.ReactNode}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
-
-export default Index;
