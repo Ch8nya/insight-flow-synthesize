@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
@@ -28,7 +27,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { toast } from 'sonner';
-import { Input } from "@/components/ui/input";
 
 import { 
   scenarios, 
@@ -53,6 +51,7 @@ interface AgentAction {
 
 const Index = () => {
   // State management
+  const [selectedScenario, setSelectedScenario] = useState<ScenarioKey>('checkout-drop');
   const [queryInput, setQueryInput] = useState("What happened to our checkout conversion yesterday afternoon?");
   const [inferredScenario, setInferredScenario] = useState<ScenarioKey>('checkout-drop');
   const [activeSources, setActiveSources] = useState({
@@ -73,25 +72,15 @@ const Index = () => {
   
   const thoughtStreamRef = useRef<HTMLDivElement>(null);
 
-  // Function to infer scenario from query
-  const inferScenarioFromQuery = (query: string): ScenarioKey => {
-    const lowerQuery = query.toLowerCase();
-    if (lowerQuery.includes('checkout') || lowerQuery.includes('conversion') || lowerQuery.includes('may 5th')) {
-      return 'checkout-drop';
-    } else if (lowerQuery.includes('api') || lowerQuery.includes('error') || lowerQuery.includes('may 6th')) {
-      return 'api-error-spike';
-    }
-    // Default to checkout scenario if no match
-    return 'checkout-drop';
-  };
-
-  // Update inferred scenario when the query changes
+  // Update query input when scenario changes
   useEffect(() => {
-    const newScenario = inferScenarioFromQuery(queryInput);
-    if (newScenario !== inferredScenario) {
-      setInferredScenario(newScenario);
+    if (selectedScenario === 'checkout-drop') {
+      setQueryInput("What happened to our checkout conversion yesterday afternoon?");
+    } else if (selectedScenario === 'api-error-spike') {
+      setQueryInput("Investigate the API error spike on May 6th.");
     }
-  }, [queryInput]);
+    setInferredScenario(selectedScenario);
+  }, [selectedScenario]);
 
   // Set initial active sources when scenario changes
   useEffect(() => {
@@ -608,12 +597,19 @@ const Index = () => {
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex-1">
-                <Input
-                  value={queryInput}
-                  onChange={(e) => setQueryInput(e.target.value)}
-                  placeholder="What do you want to investigate?"
-                  className="w-full"
-                />
+                {/* Replace input with Select dropdown */}
+                <Select
+                  value={selectedScenario}
+                  onValueChange={(value: ScenarioKey) => setSelectedScenario(value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a scenario to analyze" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="checkout-drop">What happened to our checkout conversion yesterday afternoon?</SelectItem>
+                    <SelectItem value="api-error-spike">Investigate the API error spike on May 6th.</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <Button 
                 onClick={handleAnalyze}
